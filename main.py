@@ -1,4 +1,5 @@
-import xlwings
+from openpyxl import load_workbook
+#import xlwings
 import sys
 from tkinter import *
 from tkinter.ttk import *
@@ -93,8 +94,9 @@ def open_file():
     global wb
     file_path = askopenfilename(filetypes=[("Excel files", "*.xlsx")]) 
     if file_path != "":
-        wb = xlwings.Book(file_path)
-        sheet = wb.sheets[0]
+        wb = load_workbook(file_path)
+        sheets = wb.sheetnames
+        sheet = wb[sheets[0]]
         s = read_document(sheet)
         s.check_row_used(first_post)
         headers = s.find_header(coverage_header, like_header, row_header, impression_header, hashtag_header)
