@@ -59,13 +59,10 @@ header_row_entry=Entry(ws)
 header_row_entry.insert(END, 8)
 header_row_entry.place(x=340,y=330)
 
-get_entries = Button(ws, text='Get column values', command=lambda:get_args())
-get_entries.place(x=300, y=370)
-
 excel_label = Label(ws, text='Upload Excel file', width=20,font=("bold",10))
 excel_label.place(x=180, y=410)
 
-excel_button = Button(ws, text ='Choose File', command = lambda:open_file()) 
+excel_button = Button(ws, text ='Choose File and get column values', command = lambda:open_file()) 
 excel_button.place(x=340, y=410)
 
 common_hashtag_label = Label(ws, text = 'The commons hashtag are:', font=("bold",10))
@@ -81,35 +78,35 @@ highest_likes_label = Label(ws, text = 'The post with the highest number of like
 highest_likes_label.place(x=180, y=570)
 
 def get_args():
-    global hashtag_header, coverage_header, like_header, impression_header, row_header, first_post
-
-    hashtag_header = hashtag_entry.get()
-    coverage_header = coverage_entry.get()
-    like_header = likes_entry.get()
-    impression_header = impression_entry.get()
-    row_header = header_row_entry.get()
-    first_post = first_post_entry.get() 
+    args = {}
+    args["hashtag_header"] = hashtag_entry.get()
+    args["coverage_header"] = coverage_entry.get()
+    args["like_header"] = likes_entry.get()
+    args["impression_header"] = impression_entry.get()
+    args["row_header"] = header_row_entry.get()
+    args["first_post"] = first_post_entry.get() 
+    return args
 
 def open_file():
-    global wb
     file_path = askopenfilename(filetypes=[("Excel files", "*.xlsx")]) 
     if file_path != "":
         wb = load_workbook(file_path)
         sheets = wb.sheetnames
         sheet = wb[sheets[0]]
+        args = get_args()
         s = read_document(sheet)
-        s.check_row_used(first_post)
-        headers = s.find_header(coverage_header, like_header, row_header, impression_header, hashtag_header)
+        s.check_row_used(args["first_post"])
+        headers = s.find_header(args["coverage_header"], args["like_header"], args["row_header"], args["impression_header"], args["hashtag_header"])
         if "" in headers:
             highest_coverage_label["text"] = 'The post with the highest coverage is at: "Error, please review your headers!"'
             highest_impression_label["text"] = 'The post with the highest value of impression is at: "Error, please review your headers!"' 
             highest_likes_label["text"] = 'The post with the highest number of likes is at: "Error, please review your headers!"'
         else:
             rows = s.find_top_post()
-            highest_coverage_label["text"] = 'The post with the highest coverage is at: A' + str(rows[0])
-            highest_impression_label["text"] = 'The post with the highest value of impression is at: A' + str(rows[1])
-            highest_likes_label["text"] = 'The post with the highest number of likes is at: A' + str(rows[2])   
-            common_hashtag_label["text"] = "The commons hashtag are: " + str(s.compare_hashtag())
+            highest_coverage_label["text"] = "".join(['The post with the highest coverage is at: A', str(rows[0])])
+            highest_impression_label["text"] = "".join(['The post with the highest value of impression is at: A', str(rows[1])])
+            highest_likes_label["text"] = "".join(['The post with the highest number of likes is at: A', str(rows[2])])   
+            common_hashtag_label["text"] = "".join(["The commons hashtag are: ", str(s.compare_hashtag())])
     else:
         pass
 
