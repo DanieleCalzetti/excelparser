@@ -34,13 +34,13 @@ Two ways to execute the tool:
 
 - Create the file exe
 
-    git clone https://github.com/DanieleCalzetti/excelparser.git
-    cd excelparser/
-    python -m venv <virtual environment>
-    <virtual environment>\Scripts\activate
-    pip install -r requirements.txt
-    pip install pyinstaller
-    pyinstaller --onefile main.py read_document.py -w 
+        git clone https://github.com/DanieleCalzetti/excelparser.git
+        cd excelparser/
+        python -m venv <virtual environment>
+        <virtual environment>\Scripts\activate
+        pip install -r requirements.txt
+        pip install pyinstaller
+        pyinstaller --onefile main.py read_document.py -w 
 
 ### Excel structure
 
@@ -76,7 +76,5 @@ If the header are not found it will print an error message to check the header.
 
 ## Known issues
 
-- xlwings: it is a greate module but it will open the xlsx file, in the future I want to change the module used to open and read the file to avoid its opening;
 - Slow tool and maybe hard to read: I want to improve speed  readbility and usability but before that I have to understand few technical things;
-- tkinter: change the method place() used to dispose the label in the GUI with the method grid()
 - test other excel file formats, currently the tool only accept excel with the extension xlsx.
